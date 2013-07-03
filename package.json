@@ -1,0 +1,20 @@
+{
+	"name": "turtlesoup",
+	"version": "0.9b",
+	"description": "喝海龜湯有助於增進聯想、邏輯與推理能力，海龜湯網頁版讓你輕鬆喝隨處喝！",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:tpai/turtlesoup.git"
+	},
+	"dependencies": {
+		"socket.io": "0.9.x",
+		"express": "3.0.x"
+	},
+	"engines": {
+		"node": "0.10.x"
+	}
+}
