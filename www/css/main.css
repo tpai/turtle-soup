@@ -20,3 +20,18 @@ img {
 .gray {
 	color: gray;
 }
+.highlight {
+	position: absolute;
+	background-color: pink;
+	z-index: -1;
+	display: none;
+}
+.tag_name {
+	background-color: #D2DFF6;
+	border:#bdc7d8 1px solid;
+	padding: 2px;
+}
+.label_style {
+	font-size: 14px;
+	font-weight: bold;
+}

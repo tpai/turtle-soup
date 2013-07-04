@@ -2,22 +2,24 @@
 $("#save").click(function() {
 	$(this).prop("disabled", "disabled")
 
-	var soup_id = (id === undefined)?-1:id
+	var id = (soup_id === undefined)?-1:soup_id
 	var title = $("#title input").prop("value")
+	var online = $("input[name='trigger']:checked").val()
+	var progress = $("#progress input").prop("value")
 	var prev = $("#previous textarea").val()
 	var h_inf = $("#host_inf textarea").val()
 	var g_inf = $("#guest_inf textarea").val()
 	var ans = $("#answer textarea").val()
-	var online = $("input[name='trigger']:checked").val()
 
 	var data = {
-		id: soup_id,
+		id: id,
 		title: title,
+		online: online,
+		progress: progress,
 		previous: prev,
 		host_inf: h_inf,
 		guest_inf: g_inf,
-		answer: ans,
-		online: online
+		answer: ans
 	}
 	// console.log(data)
 	console.log("Save soup data.")
@@ -26,7 +28,7 @@ $("#save").click(function() {
 		data["hostman"] = res.name
 		socket.emit("sav_soup_data", { soup: data })
 
-		if(soup_id == -1) {
+		if(id == -1) {
 			location.href = "/"
 		}
 		else {
@@ -57,7 +59,7 @@ var add_to_commu_table = function() {
 		var user = $("#username").text()
 
 		socket.emit("user_chat", {
-			id: id,
+			id: soup_id,
 			user: user,
 			says: says
 		})
@@ -67,7 +69,7 @@ var add_to_commu_table = function() {
 
 		$("#says").prop("value", "")
 
-		// console.log("["+id+"] "+user+" says '"+says+"'.")
+		// console.log("["+soup_id+"] "+user+" says '"+says+"'.")
 	}
 };
 

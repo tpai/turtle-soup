@@ -12,71 +12,85 @@
 			<div class="row">
 				<div id="list" class="span12">
 					<center>
-						<h4>
+						<h5>
 							<a href="http://forum.gamer.com.tw/C.php?bsn=60219&snA=1265&tnum=7" target="_blank">《海龜湯是什麼》</a>
 							 / 
 							<a href="http://forum.gamer.com.tw/C.php?bsn=60219&snA=1756&tnum=9" target="_blank">《怎麼出題呢》</a>
-						</h4>
-						<input type="button" id="create" class="btn btn-large btn-primary" value="煮一碗好喝的海龜湯" onclick="javascript:location.href='/create';" />
-						<h5>
+							 / 
+							<a href="http://sdrv.ms/14QHVoG" target="_blank">《遊玩記錄截圖》</a>
+						</h5>
+					</center>
+					<input type="button" id="create" class="btn btn-medium btn-primary" value="煮一碗好喝的海龜湯" onclick="javascript:location.href='/create';" />
+					<h5>
+						<div id="lobby_visitor"></div>
+						<center>
 							<span class="green">●</span>
 							燉煮 (進行)
 							<span class="red">●</span>
 							保溫 (暫停)
 							<span class="gray">●</span>
 							完食 (結束)
-						</h5>
-					</center>
+						</center>
+					</h5>
 					<table id="soup_list" class="table"></table>
 				</div>
 				<div id="main" class="span12">
-					<table class="">
+					<table>
 						<tr>
 							<td>
 								<input type="button" class="btn" value="返回列表" onclick="javascript:location.href='/'">
 							</td>
 						</tr>
 						<tr>
+							<td><div id="soup_visitor"></div></td>
+						</tr>
+						<tr>
 							<td><input type="button" class="btn btn-info" id="show_inf_table" value="資訊面板" /></td>
 						</tr>
 						<tr class="inf_table">
-							<th>本湯主題</th>
+							<td class="label_style">本湯主題</td>
 						</tr>
 						<tr class="inf_table">
 							<td id="title"></td>
 						</tr>
 						<tr class="inf_table">
-							<th>本湯狀態</th>
+							<td class="label_style">本湯進度</td>
+						</tr>
+						<tr class="inf_table">
+							<td id="progress"></td>
+						</tr>
+						<tr class="inf_table">
+							<td class="label_style">本湯狀態</td>
 						</tr>
 						<tr class="inf_table">
 							<td id="online"></td>
 						</tr>
 						<tr class="inf_table">
-							<th>主持人</th>
+							<td class="label_style">主持人</td>
 						</tr>
 						<tr class="inf_table">
 							<td id="who"></td>
 						</tr>
 						<tr class="inf_table">
-							<th>前情提要</th>
+							<td class="label_style">前情提要</td>
 						</tr>
 						<tr class="inf_table">
 							<td id="previous"></td>
 						</tr>
 						<tr class="inf_table">
-							<th>湯主提示</th>
+							<td class="label_style">湯主提示</td>
 						</tr>
 						<tr class="inf_table">
 							<td id="host_inf"></td>
 						</tr>
 						<tr class="inf_table">
-							<th>玩家情報</th>
+							<td class="label_style">玩家情報</td>
 						</tr>
 						<tr class="inf_table">
 							<td id="guest_inf"></td>
 						</tr>
 						<tr class="inf_table">
-							<th>湯底結局</th>
+							<td class="label_style">湯底結局</td>
 						</tr>
 						<tr class="inf_table">
 							<td id="answer"></td>
@@ -104,7 +118,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="highlight" style="position: absolute; background-color: pink; z-index: -1; display: none;">&nbsp;</div>
+		<div id="highlight" class="highlight">&nbsp;</div>
 		<div id="fb-root"></div>
 	</body>
 	<script src="/js/jquery-1.10.1.min.js"></script>
@@ -131,7 +145,7 @@
 			FB.Event.subscribe('auth.statusChange', function(response) {
 				if(response.status === "connected") {
 					FB.api("/me", function (res) {
-						socket.emit("user_login", { username: res.name })
+						socket.emit("user_login", { username: res.name, where: where, soup_id: soup_id })
 						$("#username").text(res.name) //初始化姓名
 						localStorage["says_history"] = JSON.stringify([]) //留言歷史
 						console.log(res.name)

@@ -4,16 +4,20 @@ var soup = [
 		"id": "1",
 		"title": "歡樂聊天區",
 		"hostman": "Han-lin Pai",
-		"previous": "今天也要好好喝湯喔 (啾咪",
+		"previous": "******** 新功能亮相 *********\n* 新增線上湯友功能\n* 新增過濾連結與圖片功能\n* 新增進度BAR 主持人可調整\n* 新增留言歷史功能 ( 在對話框中按方向鍵上下可顯示之前留言 )\n* 新增TAG姓名功能 ( 輸入 [username] 或點行頭的玩家姓名 )\n* 新增TAG行高亮功能 ( 輸入 :14 第十四行會以粉紅色底標亮 )",
 		"host_inf": "",
 		"guest_inf": "",
 		"answer": "",
+		"progress": 0,
 		"online": "0"
 	}
 ]
 
 //聊天紀錄
 var chatroom = []
+
+//在線玩家
+var online_user = []
 
 var express = require("express"),
 	app = express(),
@@ -45,15 +49,44 @@ app.configure(function () {
 })
 
 io.sockets.on("connection", function (socket) {
-	socket.on("disconnect", function () {
-		// console.log("Client disconnected!")
+	//使用者離線
+	socket.on('disconnect', function () {
+		for(var i=0;i<online_user.length;i++) {
+			var val = online_user[i]
+			if(val.socket_id == socket.id)online_user.splice(i, 1)
+		}
+	})
+	//使用者登入
+	socket.on("user_login", function (data) {
+		online_user.push({
+			socket_id: socket.id,
+			username: data.username,
+			where: data.where,
+			soup_id: data.soup_id
+		})
+		// console.log(online_user)
+		console.log("Online User ---")
+		for(var i=0;i<online_user.length;i++) {
+			var user = online_user[i]
+			console.log(user.username+"@"+user.where+"#"+user.soup_id)
+		}
+
+		//送出湯列表
+		socket.emit("res_soup_list", { list: soup })
 	})
 
-	socket.on("user_login", function (data) {
-		console.log("User "+data.username+" login!")
-
-		socket.emit("res_soup_list", { list: soup })
-		// console.log("Emit soup list to client!")
+	//當前網頁有哪些使用者
+	socket.on("visitor", function (data) {
+		var visitor = []
+		for(var i=0;i<online_user.length;i++) {
+			var val = online_user[i]
+			if(val.where == data.where && val.soup_id == data.soup_id) {
+				visitor.push(val.username)
+			}
+			if(i == online_user.length - 1) {
+				socket.emit("visitor", { visitor: visitor })
+			}
+		}
 	})
 
 	//將談話加入陣列
