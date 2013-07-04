@@ -2,33 +2,13 @@
 var soup = [
 	{
 		"id": "1",
-		"title": "海龜湯",
+		"title": "歡樂聊天區",
 		"hostman": "Han-lin Pai",
-		"previous": "一對戀人坐船出海旅遊，中途發生船難，只有男方生還，劫後餘生後男方到海產店點了一碗海龜湯，喝完之後就自殺了，為什麼？",
-		"host_inf": "* 一男一女\n* 不關海產店老闆的事",
-		"guest_inf": "",
-		"answer": "",
-		"online": "2"
-	},
-	{
-		"id": "2",
-		"title": "湖中無水草",
-		"hostman": "Han-lin Pai",
-		"previous": "一名男子在湖邊看到一個上面寫著『湖中無水草』的告示牌，回家之後就自殺了，請問為什麼？",
+		"previous": "今天也要好好喝湯喔 (啾咪",
 		"host_inf": "",
 		"guest_inf": "",
 		"answer": "",
 		"online": "0"
-	},
-	{
-		"id": "3",
-		"title": "奪命沙漠",
-		"hostman": "Han-lin Pai",
-		"previous": "有個男人頭下腳上地倒插在沙漠裡，手上拿著一根燒盡的火柴棒，請問發生了什麼事呢？",
-		"host_inf": "",
-		"guest_inf": "",
-		"answer": "",
-		"online": "1"
 	}
 ]
 

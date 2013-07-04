@@ -44,6 +44,15 @@ $("#show_inf_table").click(function() {
 var add_to_commu_table = function() {
 	var says = $("#says").prop("value")
 	if(says != "") {
+
+		//新增留言歷史
+		var arr = JSON.parse(localStorage["says_history"])
+		arr.unshift(says)
+		localStorage["says_history"] = JSON.stringify(arr)
+
+		//過濾不法字元 同時進行parse
+		says = content_parser(strip_tags(says, ""))
+
 		var hostman = $("#hostman").prop("value")
 		var user = $("#username").text()
 
@@ -54,16 +63,40 @@ var add_to_commu_table = function() {
 		})
 
 		//添加對話內容至表格
-		$("#commu").prepend("<tr><td><span name='"+user+"'>"+user+"</span>："+says+"</td></tr>")
+		$("#commu").prepend("<tr><td>"+user+"："+says+"</td></tr>")
 
 		$("#says").prop("value", "")
-		console.log("["+id+"] "+user+" says '"+says+"'.")
-	}
-	else {
-		alert("請放心地跟湯主聊天 他不會把你吃掉啦 XD")
+
+		// console.log("["+id+"] "+user+" says '"+says+"'.")
 	}
 };
 
 //送出對話
+var history_index = -1
 $("#send").click(add_to_commu_table)
-$("#says").keyup(function(e) { 	if(e.which == 13)add_to_commu_table() })
+$("#says").keyup(function(e) {
+	if(e.which == 13) {
+		history_index = -1
+		add_to_commu_table()
+		$("#highlight").hide()
+	}
+	else if(e.which == 38 || e.which == 40) {
+
+		var arr = JSON.parse(localStorage["says_history"])
+
+		switch(e.which) {
+			case 38:
+				//尚在對話歷史範圍內
+				if(history_index < arr.length - 1)history_index++
+				break
+			case 40:
+				//尚在對話歷史範圍內
+				if(history_index > 0)history_index--
+				break
+		}
+
+		//將歷史紀錄帶到輸入框
+		$("#says").prop("value", arr[history_index])
+	}
+	
+})

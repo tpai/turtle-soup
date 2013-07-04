@@ -20,7 +20,7 @@ var write_soup_data = function(row, stage) { //0:煮湯 1:主持 2:玩家
 	if(stage == 0) {
 		$("#title").html("<input type='text' value='' />")
 		$("#who").html("<input type='hidden' id='hostman' value='"+row.hostman+"' />"+row.hostman)
-		$("#online").html("<input type='radio' name='trigger' value='0'> 燉煮 <input type='radio' name='trigger' value='1'> 保溫 <input type='radio' name='trigger' value='2'> 完食")
+		$("#online").html("<input type='radio' name='trigger' value='0' checked='true'> 燉煮 <input type='radio' name='trigger' value='1'> 保溫 <input type='radio' name='trigger' value='2'> 完食")
 		$("#previous").html("<textarea></textarea>")
 		$("#host_inf").html("<textarea></textarea>")
 		$("#guest_inf").html("<textarea></textarea>")
@@ -115,25 +115,39 @@ socket.on("res_soup_list", function (data) {
 				setTimeout(function() {
 					socket.emit("req_soup_list", {})
 				}, 3000)
-				console.log("Append soup list to table!")
 			}
 		}
 	})
 })
 
+var intv_id //for highlight
 //更新交談紀錄
 socket.on("res_chat_history", function(data) {
 	var html = ""
 	$.each(data.commu, function(key, val) {
-		html = "<tr><td><span name='"+val.user+"' class='quick_name'>"+val.user+"："+val.says+"</span></td><td style='text-align: right;'>"+key+"</td></tr>" + html
+		html = "<tr><td><span name='"+val.user+"' class='quick_name'>"+val.user+"</span>："+val.says+"</td><td style='text-align: right; vertical-align: top;'><a name='"+key+"'>"+key+"</a></td></tr>" + html
 		if(key == data.commu.length - 1) {
+			//更新至表格
 			$("#commu").html(html)
-			$(".quick_name").css("cursor", "pointer")
-			$(".quick_name").click(function() {
-				var text = $(this).text().split("：")[0]
-				$("#says").prop("value", $("#says").prop("value")+text+" ")
+			//快捷輸入姓名
+			$(".quick_name")
+				.css("cursor", "pointer")
+				.click(function() {
+					var qname = $(this).text().split("：")[0]
+					$("#says").prop("value", $("#says").prop("value")+"["+qname+"] ").focus()
+				})
+
+			//綁定高亮事件
+			$(".anchor").click(function() {
+				if(intv_id != undefined)clearInterval(intv_id)
+
+				var obj = $(this)
+				intv_id = setInterval(function() {
+					highlight_tag_line($(obj).text().replace(":", ""))
+				}, 1000)
 			})
 
+			//主持人高亮
 			$("span[name='"+$("#who").text()+"']").css("font-weight", "bold").css("color", "blue")
 		}
 	})

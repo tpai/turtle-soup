@@ -5,34 +5,19 @@
 		<title>大家來喝海龜湯</title>
 		<link href="/css/bootstrap.min.css" rel="stylesheet">
 		<link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
-		<style type="text/css">
-			#list, #main {
-				display: none;
-			}
-			th, td {
-				text-align: left;
-				padding: 5px;
-			}
-			.green {
-				color: green;
-			}
-			.red {
-				color: red;
-			}
-			.gray {
-				color: gray;
-			}
-			textarea, table, input[type='text'], input[type='button'] {
-				width: 100%;
-			}
-		</style>
+		<link href="/css/main.css" rel="stylesheet">
 	</head>
 	<body>
 		<div class="container">
 			<div class="row">
 				<div id="list" class="span12">
 					<center>
-						<input type="button" id="create" class="btn btn-large btn-inverse" value="煲一鍋好喝的海龜湯" onclick="javascript:location.href='/create';" />
+						<h4>
+							<a href="http://forum.gamer.com.tw/C.php?bsn=60219&snA=1265&tnum=7" target="_blank">《海龜湯是什麼》</a>
+							 / 
+							<a href="http://forum.gamer.com.tw/C.php?bsn=60219&snA=1756&tnum=9" target="_blank">《怎麼出題呢》</a>
+						</h4>
+						<input type="button" id="create" class="btn btn-large btn-primary" value="煮一碗好喝的海龜湯" onclick="javascript:location.href='/create';" />
 						<h5>
 							<span class="green">●</span>
 							燉煮 (進行)
@@ -119,6 +104,7 @@
 				</div>
 			</div>
 		</div>
+		<div id="highlight" style="position: absolute; background-color: pink; z-index: -1; display: none;">&nbsp;</div>
 		<div id="fb-root"></div>
 	</body>
 	<script src="/js/jquery-1.10.1.min.js"></script>
@@ -146,7 +132,8 @@
 				if(response.status === "connected") {
 					FB.api("/me", function (res) {
 						socket.emit("user_login", { username: res.name })
-						$("#username").text(res.name)
+						$("#username").text(res.name) //初始化姓名
+						localStorage["says_history"] = JSON.stringify([]) //留言歷史
 						console.log(res.name)
 					})
 				}

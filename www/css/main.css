@@ -1,0 +1,22 @@
+#list, #main {
+	display: none;
+}
+th, td {
+	text-align: left;
+	padding: 5px;
+}
+textarea, table, input[type='text'], input[type='button'] {
+	width: 100%;
+}
+img {
+	max-height: 100px;
+}
+.green {
+	color: green;
+}
+.red {
+	color: red;
+}
+.gray {
+	color: gray;
+}
