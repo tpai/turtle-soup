@@ -35,3 +35,10 @@ img {
 	font-size: 14px;
 	font-weight: bold;
 }
+
+/* 手機瀏覽 不顯示時間日期 */
+@media (max-width: 767px) {
+    .timebox {
+        display: none;
+    }
+}

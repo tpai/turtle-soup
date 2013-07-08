@@ -68,7 +68,7 @@ function strip_tags (input, allowed) {
 //濾出圖片與連結
 var content_parser = function(str) {
 	str = str.replace(/:(\d{1,})/, "<a href='#$1' class='anchor'>:$1</a>")
-	str = str.replace(/\[([^\]]*)\]/ig, "<span class='tag_name'>$1</span>")
+	str = str.replace(/\[([^\]]*)\]/ig, "<span class='tag_name quick_name'>$1</span>")
 	if(str.match(/(jpg|png|gif|jpeg|bmp)/) === null)
 		return str.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig,"<a href='$1' target='_blank'>$1</a>");
 	else
@@ -90,7 +90,7 @@ var highlight_tag_line = function(line) {
 		.css("left", offset.left)
 		.show()
 };
-
+//換行字元轉換
 var nl2br = function(str) {
 	return str.replace(/\n/g, "<br />")
 };

@@ -4,7 +4,7 @@ var soup = [
 		"id": "1",
 		"title": "歡樂聊天區",
 		"hostman": "Han-lin Pai",
-		"previous": "******** 新功能亮相 *********\n* 新增線上湯友功能\n* 新增過濾連結與圖片功能\n* 新增進度BAR 主持人可調整\n* 新增留言歷史功能 ( 在對話框中按方向鍵上下可顯示之前留言 )\n* 新增TAG姓名功能 ( 輸入 [username] 或點行頭的玩家姓名 )\n* 新增TAG行高亮功能 ( 輸入 :14 第十四行會以粉紅色底標亮 )",
+		"previous": "沒事多喝湯，喝湯助健康。XDDD\n<font color='red'>註：輸入 :help 可顯示功能說明。</font>",
 		"host_inf": "",
 		"guest_inf": "",
 		"answer": "",
@@ -58,6 +58,7 @@ io.sockets.on("connection", function (socket) {
 	})
 	//使用者登入
 	socket.on("user_login", function (data) {
+		//記錄使用者socket_id及資料
 		online_user.push({
 			socket_id: socket.id,
 			username: data.username,
@@ -65,7 +66,7 @@ io.sockets.on("connection", function (socket) {
 			soup_id: data.soup_id
 		})
 		// console.log(online_user)
-		console.log("Online User ---")
+		console.log("** Online User **")
 		for(var i=0;i<online_user.length;i++) {
 			var user = online_user[i]
 			console.log(user.username+"@"+user.where+"#"+user.soup_id)
@@ -80,11 +81,34 @@ io.sockets.on("connection", function (socket) {
 		var visitor = []
 		for(var i=0;i<online_user.length;i++) {
 			var val = online_user[i]
-			if(val.where == data.where && val.soup_id == data.soup_id) {
+			//在大廳 顯示所有玩家
+			if(data.where == "lobby") {
+				visitor.push(val.username)
+			}
+			//在湯裡 顯示該湯玩家
+			else if(val.where == data.where && val.soup_id == data.soup_id) {
 				visitor.push(val.username)
 			}
 			if(i == online_user.length - 1) {
-				socket.emit("visitor", { visitor: visitor })
+				if(data.where == "lobby") {
+					//移除重複玩家
+					var uniq = []
+					for(var i=0;i<visitor.length;i++) {
+						var el = visitor[i]
+						if(uniq.length == 0) {
+							uniq.push(el)
+						}
+						else {
+							for(var j=0;j<uniq.length;j++) {
+								if(el == uniq[j])break
+								if(j == uniq.length - 1)uniq.push(el)
+							}
+						}
+						if(i == visitor.length - 1)socket.emit("visitor", { visitor: uniq })
+					}
+				}
+				else
+					socket.emit("visitor", { visitor: visitor })
 			}
 		}
 	})
@@ -95,7 +119,7 @@ io.sockets.on("connection", function (socket) {
 			var val = chatroom[i]
 
 			if(val.id == data.id) {
-				chatroom[i].commu.push({ user: data.user, says: data.says })
+				chatroom[i].commu.push({ user: data.user, says: data.says, time: data.time })
 				return null
 			}
 

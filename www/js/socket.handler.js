@@ -20,7 +20,7 @@ var write_soup_data = function(row, stage) { //0:煮湯 1:主持 2:玩家
 	if(stage == 0) {
 		$("#title").html("<input type='text' value='' />")
 		$("#online").html("<input type='radio' name='trigger' value='0' checked='true'> 燉煮 <input type='radio' name='trigger' value='1'> 保溫 <input type='radio' name='trigger' value='2'> 完食")
-		$("#progress").html("<input type='text' value='"+row.progress+"' style='width: 50px;' /> %")
+		$("#progress").html("<input type='text' value='0' style='width: 50px;' /> %")
 		$("#who").html("<input type='hidden' id='hostman' value='"+row.hostman+"' />"+row.hostman)
 		$("#previous").html("<textarea></textarea>")
 		$("#host_inf").html("<textarea></textarea>")
@@ -96,6 +96,8 @@ socket.on("res_soup_list", function (data) {
 					}, 1000)
 				})
 				
+				//變更網頁標題
+				$("title").text(row.title)
 				$("#main").show()
 
 				console.log("Append soup detail to table.")
@@ -130,16 +132,15 @@ var intv_id //for highlight
 socket.on("res_chat_history", function (data) {
 	var html = ""
 	$.each(data.commu, function (key, val) {
-		html = "<tr><td><span name='"+val.user+"' class='quick_name'>"+val.user+"</span>："+val.says+"</td><td style='text-align: right; vertical-align: top;'><a name='"+key+"'>"+key+"</a></td></tr>" + html
+		html = "<tr><td><span name='"+val.user+"' class='quick_name'>"+val.user+"</span>："+val.says+"</td><td style='text-align: right; vertical-align: top;'><a name='"+(key+1)+"' class='line_number'>:"+(key+1)+"</a><span class='timebox'>《"+val.time+"》</span></td></tr>" + html
 		if(key == data.commu.length - 1) {
 			//更新至表格
 			$("#commu").html(html)
-			//快捷輸入姓名
-			$(".quick_name")
+			//快捷輸入行號
+			$(".line_number")
 				.css("cursor", "pointer")
 				.click(function() {
-					var qname = $(this).text().split("：")[0]
-					$("#says").prop("value", $("#says").prop("value")+"["+qname+"] ").focus()
+					$("#says").prop("value", $("#says").prop("value")+" "+$(this).text()+" ").focus()
 				})
 
 			//綁定高亮事件
@@ -173,7 +174,15 @@ socket.on("visitor", function (data) {
 	var visitor = data.visitor
 	var html = "<span class='label_style'>線上湯友：</span>"
 	$.each(visitor, function(key, val) {
-		html += "<span class='tag_name'>"+val+"</span> "
+		html += "<span class='tag_name quick_name'>"+val+"</span> "
 	})
 	$("#"+where+"_visitor").html(html)
+
+	//快捷輸入姓名
+	$(".quick_name")
+		.css("cursor", "pointer")
+		.click(function() {
+			var qname = $(this).text().split("：")[0]
+			$("#says").prop("value", $("#says").prop("value")+"["+qname+"] ").focus()
+		})
 })
