@@ -1,3 +1,6 @@
+// 定義連接埠
+var port = 500
+
 //湯資料
 var soup = [
 	{
@@ -29,7 +32,7 @@ var express = require("express"),
 		log: false
 	})
 
-server.listen(500)
+server.listen(port)
 
 app.configure(function () {
 	app.use("/imgs", express.static(__dirname + "/imgs"))

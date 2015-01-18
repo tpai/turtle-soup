@@ -1,9 +1,9 @@
-var hostname = "tonypai.twbbs.org:500"
+var hostname = location.href
 var path = location.pathname.split("/")
 var where = (path[1]=="")?"lobby":path[1]
 var soup_id = (path[2]==undefined)?-1:path[2]
 
-var socket = io.connect("http://" + hostname, {
+var socket = io.connect(hostname, {
 	"force new connection": true
 });
 
