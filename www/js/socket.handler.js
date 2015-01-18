@@ -1,4 +1,4 @@
-var hostname = location.href
+var hostname = window.location.host
 var path = location.pathname.split("/")
 var where = (path[1]=="")?"lobby":path[1]
 var soup_id = (path[2]==undefined)?-1:path[2]
