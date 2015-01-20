@@ -25,7 +25,9 @@ PTT Turtlesoup版
     npm install
 
 2) 修改app.js中的連接埠
+
 3) 至Facebook開發者專區[註冊App](https://developers.facebook.com/apps/)
+
 4) 將取得的app_id取代www/index.html中的default值
 
     FB.init({
