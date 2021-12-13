@@ -1,167 +1,188 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>大家來喝海龜湯</title>
-		<link href="/css/bootstrap.min.css" rel="stylesheet">
-		<link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
-		<link href="/css/main.css" rel="stylesheet">
-	</head>
-	<body>
-		<div class="container">
-			<div class="row">
-				<div id="list" class="span12">
-					<center>
-						<h5>
-							<a href="http://forum.gamer.com.tw/C.php?bsn=60219&snA=1265&tnum=7" target="_blank">《海龜湯是什麼》</a>
-							 / 
-							<a href="http://forum.gamer.com.tw/C.php?bsn=60219&snA=1756&tnum=9" target="_blank">《怎麼出題呢》</a>
-							 / 
-							<a href="http://sdrv.ms/14QHVoG" target="_blank">《遊玩記錄截圖》</a>
-						</h5>
-					</center>
-					<input type="button" id="create" class="btn btn-medium btn-primary" value="煮一碗好喝的海龜湯" onclick="javascript:location.href='/create';" />
-					<p><div id="lobby_visitor"></div></p>
-					<h5>
-						
-						<center>
-							<span class="green">●</span>
-							燉煮 (進行)
-							<span class="red">●</span>
-							保溫 (暫停)
-							<span class="gray">●</span>
-							完食 (結束)
-						</center>
-					</h5>
-					<table id="soup_list" class="table"></table>
-				</div>
-				<div id="main" class="span12">
-					<table>
-						<tr>
-							<td>
-								<input type="button" class="btn" value="返回列表" onclick="javascript:location.href='/'">
-							</td>
-						</tr>
-						<tr>
-							<td><div id="soup_visitor"></div></td>
-						</tr>
-						<tr>
-							<td><input type="button" class="btn btn-info" id="show_inf_table" value="資訊面板" /></td>
-						</tr>
-						<tr class="inf_table">
-							<td class="label_style">本湯主題</td>
-						</tr>
-						<tr class="inf_table">
-							<td id="title"></td>
-						</tr>
-						<tr class="inf_table">
-							<td class="label_style">本湯進度</td>
-						</tr>
-						<tr class="inf_table">
-							<td id="progress"></td>
-						</tr>
-						<tr class="inf_table">
-							<td class="label_style">本湯狀態</td>
-						</tr>
-						<tr class="inf_table">
-							<td id="online"></td>
-						</tr>
-						<tr class="inf_table">
-							<td class="label_style">主持人</td>
-						</tr>
-						<tr class="inf_table">
-							<td id="who"></td>
-						</tr>
-						<tr class="inf_table">
-							<td class="label_style">前情提要</td>
-						</tr>
-						<tr class="inf_table">
-							<td id="previous"></td>
-						</tr>
-						<tr class="inf_table">
-							<td class="label_style">湯主提示</td>
-						</tr>
-						<tr class="inf_table">
-							<td id="host_inf"></td>
-						</tr>
-						<tr class="inf_table">
-							<td class="label_style">玩家情報</td>
-						</tr>
-						<tr class="inf_table">
-							<td id="guest_inf"></td>
-						</tr>
-						<tr class="inf_table">
-							<td class="label_style">湯底結局</td>
-						</tr>
-						<tr class="inf_table">
-							<td id="answer"></td>
-						</tr>
-						<tr class="inf_table">
-							<td id="edit">
-								<input type='button' id='save' class='btn btn-success' value='儲存'>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<center>
-									<span id="username">username</span>
-								</center>
-								<input type="text" id="says" />
-								<input type="button" id="send" class="btn btn-primary" value="送出">
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<table id="commu"></table>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</div>
-		<div id="highlight" class="highlight">&nbsp;</div>
-		<div id="fb-root"></div>
-	</body>
-	<script src="/js/jquery-1.10.1.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/library.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="/js/socket.handler.js"></script>
-	<script src="/js/button.handler.js"></script>
-	<script type="text/javascript">
-		//使用 Facebook 帳號登入
-		window.fbAsyncInit = function () {
-			FB.init({
-				appId: "156887297829765",
-				channelUrl: "//" + hostname + "/channel.html",
-				xfbml: true
-			})
-
-			//取得目前登入狀態
-			FB.getLoginStatus(function (response) {
-				if(response.status !== "connected")FB.login()
-			})
-
-			//登入狀態改變事件偵聽
-			FB.Event.subscribe('auth.statusChange', function(response) {
-				if(response.status === "connected") {
-					FB.api("/me", function (res) {
-						socket.emit("user_login", { username: res.name, where: where, soup_id: soup_id })
-						$("#username").text(res.name) //初始化姓名
-						localStorage["says_history"] = JSON.stringify([]) //留言歷史
-						console.log(res.name)
-					})
-				}
-			});
-		};
-
-		// Load the SDK Asynchronously
-		(function(d){
-			var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-			if (d.getElementById(id)) {return;}
-			js = d.createElement('script'); js.id = id; js.async = true;
-			js.src = "//connect.facebook.net/en_US/all.js";
-			ref.parentNode.insertBefore(js, ref);
-		}(document));
-	</script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>大家來喝海龜湯</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="/css/main.css" rel="stylesheet" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/sanitize-html/1.27.5/sanitize-html.min.js"
+      integrity="sha512-1WdDeZGPykoWawFKD3NGJfZM+4hq2+OxUF8ZJrrqFBNU3J+Q5Tgvn+XwHNt8HaVs1MRFFlAgtOgyJr6/mqN/xw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      let username = localStorage.username;
+      if (typeof username === "undefined" || username === "") {
+        username = sanitizeHtml(prompt("請輸入你的暱稱"));
+        localStorage.username = username;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div id="list" class="span12">
+          <center>
+            <h5>
+              <a
+                href="https://forum.gamer.com.tw/C.php?bsn=60219&snA=1265&tnum=7"
+                target="_blank"
+                >《海龜湯是什麼》</a
+              >
+              /
+              <a
+                href="https://forum.gamer.com.tw/C.php?bsn=60219&snA=1756&tnum=9"
+                target="_blank"
+                >《怎麼出題呢》</a
+              >
+              /
+              <a
+                href="https://1drv.ms/u/s!AgftbQ8s6cRQhVOBLdHHD0ZZ4s50?e=fiPORg"
+                target="_blank"
+                >《遊玩記錄截圖》</a
+              >
+            </h5>
+          </center>
+          <input
+            type="button"
+            id="create"
+            class="btn btn-medium btn-primary"
+            value="煮一碗好喝的海龜湯"
+            onclick="javascript:location.href='/create';"
+          />
+          <div id="lobby_visitor" class="visitors"></div>
+          <h5>
+            <center>
+              <span class="green">●</span>
+              燉煮 (進行)
+              <span class="red">●</span>
+              保溫 (暫停)
+              <span class="gray">●</span>
+              完食 (結束)
+            </center>
+          </h5>
+          <table id="soup_list" class="table"></table>
+        </div>
+        <div id="main" class="span12">
+          <table>
+            <tr>
+              <td>
+                <input
+                  type="button"
+                  class="btn"
+                  value="返回列表"
+                  onclick="javascript:location.href='/'"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><div id="soup_visitor"></div></td>
+            </tr>
+            <tr>
+              <td>
+                <input
+                  type="button"
+                  class="btn btn-info"
+                  id="show_inf_table"
+                  value="資訊面板"
+                />
+              </td>
+            </tr>
+            <tr class="inf_table">
+              <td class="label_style">本湯主題</td>
+            </tr>
+            <tr class="inf_table">
+              <td id="title"></td>
+            </tr>
+            <tr class="inf_table">
+              <td class="label_style">本湯進度</td>
+            </tr>
+            <tr class="inf_table">
+              <td id="progress"></td>
+            </tr>
+            <tr class="inf_table">
+              <td class="label_style">本湯狀態</td>
+            </tr>
+            <tr class="inf_table">
+              <td id="online"></td>
+            </tr>
+            <tr class="inf_table">
+              <td class="label_style">主持人</td>
+            </tr>
+            <tr class="inf_table">
+              <td id="who"></td>
+            </tr>
+            <tr class="inf_table">
+              <td class="label_style">前情提要</td>
+            </tr>
+            <tr class="inf_table">
+              <td id="previous"></td>
+            </tr>
+            <tr class="inf_table">
+              <td class="label_style">湯主提示</td>
+            </tr>
+            <tr class="inf_table">
+              <td id="host_inf"></td>
+            </tr>
+            <tr class="inf_table">
+              <td class="label_style">玩家情報</td>
+            </tr>
+            <tr class="inf_table">
+              <td id="guest_inf"></td>
+            </tr>
+            <tr class="inf_table">
+              <td class="label_style">湯底結局</td>
+            </tr>
+            <tr class="inf_table">
+              <td id="answer"></td>
+            </tr>
+            <tr class="inf_table">
+              <td id="edit">
+                <input
+                  type="button"
+                  id="save"
+                  class="btn btn-success"
+                  value="儲存"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <center>
+                  <span id="username">username</span>
+                </center>
+                <input type="text" id="says" />
+                <input
+                  type="button"
+                  id="send"
+                  class="btn btn-primary"
+                  value="送出"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table id="commu"></table>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="highlight" class="highlight">&nbsp;</div>
+  </body>
+  <script src="/js/jquery-1.10.1.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/library.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/socket.handler.js"></script>
+  <script src="/js/button.handler.js"></script>
+  <script type="text/javascript">
+    socket.emit("user_login", { username, where: where, soup_id: soup_id });
+    $("#username").text(username); //初始化姓名
+    localStorage["says_history"] = JSON.stringify([]); //留言歷史
+    console.log(username);
+  </script>
 </html>

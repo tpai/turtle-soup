@@ -1,6 +1,9 @@
 #list, #main {
 	display: none;
 }
+.visitors {
+  margin-top: 10px;
+}
 th, td {
 	text-align: left;
 	padding: 5px;

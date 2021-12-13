@@ -17,22 +17,19 @@ PTT Turtlesoup版
 * 湯主可藉由管理資訊面板 整理提示以及情報
 * 湯主與玩家以聊天室的方式互動 加快遊戲進行速度
 
-安裝
+設置
 ---
 
 1) 安裝所需套件
 
+    ```sh
     npm install
+    ```
 
 2) 修改app.js中的連接埠
 
-3) 至Facebook開發者專區[註冊App](https://developers.facebook.com/apps/)
+3) 啟動
 
-4) 將取得的app_id取代www/index.html中的default值
-
-    FB.init({
-		appId: "your-fb-app-id", // 填入app_id
-
-5) 啟動
-
+    ```sh
     node app.js
+    ```
