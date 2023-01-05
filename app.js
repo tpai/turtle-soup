@@ -29,7 +29,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-server.listen(process.env.PORT || 5000);
+server.listen(process.env.PORT || 8080);
 
 const root = path.resolve(__dirname, "./www");
 const assets = path.resolve(__dirname, "./www/static");
